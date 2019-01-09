@@ -22,28 +22,29 @@ const UserSchema = new mongoose.Schema({
 });
 
 UserSchema.pre('save', function(next) {
-    let user = this;
-    let SALT_FACTOR = 5;
+    var user = this;
+    var SALT_FACTOR = 5;
+
+    console.log("in pre save");
 
     if(!user.isModified('password')) {
         return next();
-
+    }
         // code to generate salt for salt for encryption
         bcrypt.genSalt(SALT_FACTOR, function(err, salt){
             if(err) {
-                return netx(err);
+                return next(err);
             }
             // code to hash the password
-            bcrypt.hash(user.password, salt,null, function(err,hash) {
+            bcrypt.hash(user.password, salt, null, function(err,hash) {
                 if(err){
                     return next(err);
                 }
                 user.password = hash;
                 next();
-            })
-        })
-    }
-})
+            });
+        });
+    });
 
 UserSchema.methods.comparePassword = function(passwordAttempt, cb) {
     bcrypt.compare(passwordAttempt, this.password, function(err, isMatch) {
