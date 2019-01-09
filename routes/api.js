@@ -121,7 +121,7 @@ router.get('/film', passport.authenticate('jwt', {session: false}), function(req
 
 // Get single film by ID
 
-router.get('film:id', passport.authenticate('jwt', {session: false}), function(req,res,next){
+router.get('/film:id', passport.authenticate('jwt', {session: false}), function(req,res,next){
     var token = getToken(req.headers);
     if(token) {
         console.log("the id is: ");
