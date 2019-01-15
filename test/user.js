@@ -44,6 +44,7 @@ describe('Create account, login and check token', () => {
                         expect(res.body.success).to.be.true;
                         res.body.should.have.property('token');
                         let token = res.body.token;
+                        console.log(token);
                         // follow up with requesting user protected page
                         chai.request(server)
                             .get('/api/film')
