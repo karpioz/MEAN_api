@@ -18,15 +18,16 @@ let login_details = {
     'password': '123@abc'
 }
 
+
 describe('Create account, login and check token', () => {
     beforeEach((done) => {
         // Reset user mode before each set
         User.deleteMany({}, (err) => {
             console.log(err);
             done();
-})
-});
- describe('/POST Register', ()=> {
+        })
+    });
+    describe('/POST Register', ()=> {
      it('it should Register, Login and check token', (done) => {
          chai.request(server)
              .post('/api/signup')
@@ -58,7 +59,7 @@ describe('Create account, login and check token', () => {
                         })
                 })
 
-         })
-})
- })
+             })
+        })
+    })
 })
