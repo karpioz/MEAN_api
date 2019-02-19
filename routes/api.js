@@ -8,18 +8,6 @@ const router = express.Router();
 const User = require("../models/user");
 const Film = require("../models/film");
 
-const app = express();
-
-//add CORS support before any routing
-app.use(function(req,res,next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Controll-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header("Access-Control-Expose-Headers", "Authorization"); // have to expose so that browser have
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS");
-    next();
-});
-
-
 //Create router for signup or register the new user
 router.post('/signup', function(req,res) {
 

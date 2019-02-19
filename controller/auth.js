@@ -61,7 +61,7 @@ exports.register = function(req,res,next) {
             var userInfo = setUserInfo(user);
 
             res.status(201).json({
-                token: 'JWT' + generateToken(userInfo),
+                token: 'JWT ' + generateToken(userInfo),
                 user: userInfo
             })
         })

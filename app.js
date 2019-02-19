@@ -13,7 +13,19 @@ const index = require('./routes/index');
 const users = require('./routes/users');
 // Add route for our api
 const api = require('./routes/api');
+
 const app = express();
+
+// Add Cors support before any routing
+app.use(function(reg, res, next) {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+    res.header('Access-Control-Expose-Headers', 'Authorization'); // Have to expose so that browser have
+    res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, PATCH, OPTIONS');
+    next();
+});
+
+app.use(passport.initialize());
 
 // create a connection to MongoDB wrapped in try / catch block
 try {
@@ -34,22 +46,6 @@ try {
 catch(e) {
   console.log(e.message);
 }
-
-
-
-// To make this server CORS-ENABLE add this lines of code
-
-
-//add CORS support before any routing
-app.use(function(req,res,next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Controll-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-    res.header("Access-Control-Expose-Headers", "Authorization"); // have to expose so that browser have
-    res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH,OPTIONS");
-    next();
-});
-
-app.use(passport.initialize());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
