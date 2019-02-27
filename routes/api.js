@@ -7,6 +7,8 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 const User = require("../models/user");
 const Film = require("../models/film");
+const Comment = require("../models/comments");
+
 
 //Create router for signup or register the new user
 router.post('/signup', function(req,res) {
@@ -161,5 +163,72 @@ router.delete('/film:id', passport.authenticate('jwt', {session: false}), functi
         return res.status(403).send({success: false, msg: 'Unauthorized.'});
     }
 });
+
+// Comments REST Services
+
+// Create comment
+router.post('/comment', passport.authenticate('jwt',{session: false}), function(req,res){
+    var token = getToken(req.headers);
+    if(token) {
+        console.log(req.body);
+        var newComment = new Comment({
+            comment: req.body.comment,
+            userID: req.body.userID,
+            filmID: req.body.filmID
+        });
+
+        newComment.save(function(err) {
+            if(err){
+                return res.json({success: false, msg: 'Save comment failed'});
+            }
+            res.json({success: true, msg: 'Successful created new comment'});
+        });
+    } else {
+        return res.status(403).send({success: false, msg: 'Unauthorized'});
+    }
+})
+
+// GET comments by filmID
+router.get('/comment:filmID', passport.authenticate('jwt',{session: false}), function(req,res,next){
+    var token = getToken(req.headers);
+    if(token){
+        Comment.find({filmID: req.params.filmID})
+            .exec(function(err,posts){
+                if(err) return next(err);
+                console.log('The posts are an array: ', posts);
+                res.json(posts);
+            });
+    } else {
+        return res.status(403).send({success: false, msg: 'Unauthorized'});
+    }
+});
+
+// DELETE comment
+router.delete('/comment:id', passport.authenticate('jwt', {session: false}), function(req,res,next){
+    var token = getToken(req.headers);
+    if(token){
+        Comment.findByIdAndRemove(req.params.id, req.body, function(err,post){
+            if(err) return next(err);
+            res.json(post);
+        });
+    } else {
+        return res.status(403).send({success: false, msg: 'Unauthorized'});
+    }
+});
+
+// UPDATE comment
+router.put('/comment:id', passport.authenticate('jwt', {session: false}), function(req,res,next){
+    var token = getToken(req.headers);
+    if(token){
+        Comment.findByIdAndUpdate(req.params.id, req.body, function(err,post){
+            if(err) return next(err);
+            res.json(post);
+        });
+    } else {
+        return res.status(403).send({success: false, msg: 'Unauthorized'});
+    }
+});
+
+
 
 module.exports = router;
