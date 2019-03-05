@@ -27,8 +27,8 @@ let FilmSchema = new Schema( {
         required: true
     },
     img: {
-        data: Buffer,
-        contentType: String
+        data: String,
+        //contentType: String
     }
 
 }, {
